@@ -2,7 +2,7 @@ const functions = require("firebase-functions");
 const fetch = require("node-fetch");
 const Busboy = require("busboy");
 
-const HF_TOKEN = process.env.HF_TOKEN;
+const HF_TOKEN = process.env.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;
 const MODEL = "Salesforce/blip-image-captioning-base";
 
 exports.getCaption = functions.https.onRequest((req, res) => {
