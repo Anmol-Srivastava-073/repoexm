@@ -3,7 +3,7 @@ const Busboy = require("busboy");
 
 const MODEL = "Salesforce/blip-image-captioning-base";
 // Replace with your Hugging Face token
-const HF_TOKEN = "hf_xxxxxYOURTOKENxxxxx";
+const HF_TOKEN = "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";
 
 exports.handler = async (event, context) => {
   return new Promise((resolve, reject) => {
