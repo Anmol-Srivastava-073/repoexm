@@ -2,17 +2,19 @@ const functions = require("firebase-functions");
 const fetch = require("node-fetch");
 const Busboy = require("busboy");
 
-const HF_TOKEN = process.env.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;
 const MODEL = "Salesforce/blip-image-captioning-base";
 
+// Securely use token from Firebase config
+const HF_TOKEN = functions.config().hf.token;
+
 exports.getCaption = functions.https.onRequest((req, res) => {
-  // Enable CORS for browser requests
+  // Enable CORS
   res.set("Access-Control-Allow-Origin", "*");
   res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   if (req.method === "OPTIONS") {
-    return res.status(204).send(""); // Handle preflight
+    return res.status(204).send("");
   }
 
   if (req.method !== "POST") {
@@ -51,9 +53,7 @@ exports.getCaption = functions.https.onRequest((req, res) => {
       const result = await response.json();
 
       if (result.error) {
-        return res
-          .status(500)
-          .json({ error: result.error || "Model inference failed" });
+        return res.status(500).json({ error: result.error });
       }
 
       const caption = result[0]?.generated_text || "No caption found.";
