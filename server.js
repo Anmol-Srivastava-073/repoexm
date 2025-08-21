@@ -1,25 +1,21 @@
-const functions = require("firebase-functions");
+const express = require("express");
 const fetch = require("node-fetch");
 const Busboy = require("busboy");
 
+const app = express();
+const PORT = 8080;
+
+// Hugging Face Model
 const MODEL = "Salesforce/blip-image-captioning-base";
 
-// Securely use token from Firebase config
-const HF_TOKEN = functions.config().hf.token;
+// ⚠️ Replace with your Hugging Face API token
+const HF_TOKEN = "hf_xxxxxYOURTOKENxxxxx";
 
-exports.getCaption = functions.https.onRequest((req, res) => {
+app.post("/getCaption", (req, res) => {
   // Enable CORS
   res.set("Access-Control-Allow-Origin", "*");
   res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-  if (req.method === "OPTIONS") {
-    return res.status(204).send("");
-  }
-
-  if (req.method !== "POST") {
-    return res.status(405).send("Method Not Allowed");
-  }
 
   const busboy = new Busboy({ headers: req.headers });
   let uploadBuffer = null;
@@ -65,4 +61,8 @@ exports.getCaption = functions.https.onRequest((req, res) => {
   });
 
   req.pipe(busboy);
+});
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
